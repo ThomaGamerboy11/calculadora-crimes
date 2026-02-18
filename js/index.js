@@ -13,18 +13,25 @@ async function load_crimes_from_db() {
     contra_vida_sociedade: "data/contra_vida_sociedade.json",
   };
 
-  const loaded = await Promise.all(
-    Object.entries(files).map(async ([key, url]) => {
-      const response = await fetch(url);
-      return [key, await response.json()];
-    })
-  );
+  try {
+    for (const [key, url] of Object.entries(files)) {
+      const r = await fetch(url, { cache: "no-store" });
+      console.log("A carregar:", key, url, "status:", r.status);
 
-  for (const [key, data] of loaded) {
-    stored_crimes[key] = data;
+      if (!r.ok) throw new Error(`${url} -> HTTP ${r.status}`);
+
+      const data = await r.json();
+      console.log(key, "items:", data.length);
+
+      stored_crimes[key] = data;
+    }
+
+    console.log("Tudo carregado ✅");
+    search_crimes("");
+  } catch (err) {
+    console.error("ERRO a carregar crimes:", err);
+    alert("Erro a carregar crimes. Abre F12 > Console para ver detalhes.");
   }
-
-  search_crimes("");
 }
 
 /**
