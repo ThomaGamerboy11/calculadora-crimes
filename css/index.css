@@ -16890,3 +16890,14 @@ html {
 .card:first-of-type {
     color: #ffffff !important;
 }
+
+.articleCard {
+    transition: all 0.2s ease;
+}
+
+.articleCard:hover {
+    background-color: #2a2a2a !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
